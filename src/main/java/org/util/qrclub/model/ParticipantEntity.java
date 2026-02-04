@@ -1,10 +1,7 @@
 package org.util.qrclub.model;
 
-import org.util.qrclub.model.QRCode;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "participants")
@@ -13,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Participant {
+public class ParticipantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +26,6 @@ public class Participant {
     private String patronymic;
 
     @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private QRCode qrCode;
+    private QRCodeEntity qrCode;
 }
 

@@ -1,8 +1,8 @@
 package org.util.qrclub.service;
 
-import org.util.qrclub.dto.ParticipantRequestDto;
 import org.util.qrclub.dto.ParticipantResponseDto;
 import org.util.qrclub.dto.QRCodeResponseDto;
+import org.util.qrclub.model.QRCodeEntity;
 
 import java.util.UUID;
 
@@ -13,5 +13,8 @@ public interface QRCodeService {
     QRCodeResponseDto regenerate(Long participantId);
 
     QRCodeResponseDto getByParticipant(Long participantId);
+
+    void refreshUuid(QRCodeEntity qrCode);
+
 }
 

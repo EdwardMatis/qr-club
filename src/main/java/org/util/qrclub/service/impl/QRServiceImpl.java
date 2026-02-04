@@ -9,8 +9,8 @@ import org.util.qrclub.exception.ParticipantNotFoundException;
 import org.util.qrclub.exception.QRCodeNotFoundException;
 import org.util.qrclub.mapper.ParticipantMapper;
 import org.util.qrclub.mapper.QRCodeMapper;
-import org.util.qrclub.model.Participant;
-import org.util.qrclub.model.QRCode;
+import org.util.qrclub.model.ParticipantEntity;
+import org.util.qrclub.model.QRCodeEntity;
 import org.util.qrclub.repository.ParticipantRepository;
 import org.util.qrclub.repository.QRCodeRepository;
 import org.util.qrclub.service.QRCodeService;
@@ -22,34 +22,39 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QRServiceImpl implements QRCodeService {
 
-    private final QRCodeRepository QRCodeRepository;
+    private final QRCodeRepository qrCodeRepository;
     private final ParticipantRepository participantRepository;
     private final ParticipantMapper participantMapper;
     private final QRCodeMapper qrCodeMapper;
+    private final QRCodeService qrCodeService;
 
     @Override
     public ParticipantResponseDto scanAndRefresh(UUID uuid) {
-        QRCode qrCode = QRCodeRepository.findByUuid(uuid)
+        QRCodeEntity qrCode = qrCodeRepository.findByUuid(uuid)
                 .orElseThrow(() -> new QRCodeNotFoundException(uuid));
         return participantMapper.toResponse(qrCode.getParticipant());
 
     }
 
     @Override
+    public void refreshUuid(QRCodeEntity qrCode) {qrCode.setUuid(UUID.randomUUID());}
+
+    @Override
     public QRCodeResponseDto regenerate(Long participantId) {
-        Participant participant = participantRepository.findById(participantId)
+        ParticipantEntity participant = participantRepository.findById(participantId)
                 .orElseThrow(() -> new ParticipantNotFoundException(participantId));
-        QRCode qrCode = participant.getQrCode();
-        qrCode.refreshUuid();
-        QRCodeRepository.save(qrCode);
+        QRCodeEntity qrCode = participant.getQrCode();
+        qrCodeService.refreshUuid(qrCode);
+        qrCodeRepository.save(qrCode);
         return qrCodeMapper.toResponse(qrCode);
     }
+
 
     @Override
     @Transactional(readOnly = true)
     public QRCodeResponseDto getByParticipant(Long participantId) {
-        Participant participant = participantRepository.findById(participantId)
-                .orElseThrow(() -> new RuntimeException("Participant not found"));
+        ParticipantEntity participant = participantRepository.findById(participantId)
+                .orElseThrow(() -> new ParticipantNotFoundException(participantId));
         return qrCodeMapper.toResponse(participant.getQrCode());
     }
 

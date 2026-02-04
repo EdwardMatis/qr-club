@@ -3,12 +3,12 @@ package org.util.qrclub.mapper;
 import org.springframework.stereotype.Component;
 import org.util.qrclub.dto.ParticipantRequestDto;
 import org.util.qrclub.dto.ParticipantResponseDto;
-import org.util.qrclub.model.Participant;
+import org.util.qrclub.model.ParticipantEntity;
 
 @Component
 public class ParticipantMapper {
 
-    public ParticipantResponseDto toResponse(Participant entity) {
+    public ParticipantResponseDto toResponse(ParticipantEntity entity) {
         ParticipantResponseDto dto = new ParticipantResponseDto();
         dto.setId(entity.getId());
         dto.setFirstName(entity.getFirstName());
@@ -22,8 +22,8 @@ public class ParticipantMapper {
         return dto;
     }
 
-    public Participant toEntity(ParticipantRequestDto dto) {
-        Participant entity = new Participant();
+    public ParticipantEntity toEntity(ParticipantRequestDto dto) {
+        ParticipantEntity entity = new ParticipantEntity();
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setPatronymic(dto.getPatronymic());
@@ -32,7 +32,7 @@ public class ParticipantMapper {
 
     public void updateEntity(
             ParticipantRequestDto dto,
-            Participant entity
+            ParticipantEntity entity
     ) {
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());

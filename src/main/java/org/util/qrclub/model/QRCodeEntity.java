@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QRCode {
+public class QRCodeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,6 @@ public class QRCode {
 
     @OneToOne
     @JoinColumn(name = "participant_id", nullable = false, unique = true)
-    private Participant participant;
+    private ParticipantEntity participant;
 
-    public void refreshUuid() {
-        this.uuid = UUID.randomUUID();
-    }
 }
